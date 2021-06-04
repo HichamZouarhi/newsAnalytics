@@ -6,6 +6,7 @@ import constants
 import nltk
 from string import punctuation
 from collections import Counter
+from bs4 import BeautifulSoup
 
 
 def get_news_from_item(item, location):
@@ -31,7 +32,7 @@ def get_news_feed_by_location(location):
     return news_list
 
 
-def get_most_used_words_by_location(news_list):
+def get_most_used_words_by_location(news_list, limit=10):
     """
     :param news_list: list of news (objects)
     :return: str most used word, if more than one returns a list
@@ -39,7 +40,7 @@ def get_most_used_words_by_location(news_list):
     stopwords = set(nltk.corpus.stopwords.words('english'))
     key_words = Counter()
     for news in news_list:
-        print(news.description)
-        key_words.update(w.lower().rstrip(punctuation) for w in news.description.split(" ") if w not in stopwords)
+        clean_text = BeautifulSoup(news.description, "lxml").text
+        key_words.update(w.lower().rstrip(punctuation) for w in clean_text.split(" ") if w not in stopwords)
 
-    return dict((k, v) for k, v in key_words.most_common(10))
+    return dict((k, v) for k, v in key_words.most_common(limit))
