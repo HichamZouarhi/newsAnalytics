@@ -7,6 +7,7 @@ import nltk
 from string import punctuation
 from collections import Counter
 from bs4 import BeautifulSoup
+from nltk.stem import PorterStemmer
 
 
 def get_news_from_item(item, location):
@@ -37,10 +38,11 @@ def get_most_used_words_by_location(news_list, limit=10):
     :param news_list: list of news (objects)
     :return: str most used word, if more than one returns a list
     """
+    ps = PorterStemmer()
     stopwords = set(nltk.corpus.stopwords.words('english'))
     key_words = Counter()
     for news in news_list:
         clean_text = BeautifulSoup(news.description, "lxml").text
-        key_words.update(w.lower().rstrip(punctuation) for w in clean_text.split(" ") if w not in stopwords)
+        key_words.update(ps.stem(w.lower().rstrip(punctuation)) for w in clean_text.split(" ") if w not in stopwords)
 
     return dict((k, v) for k, v in key_words.most_common(limit))
