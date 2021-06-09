@@ -8,3 +8,5 @@ DESCRIPTION_TAG = "description"
 PUBLICATION_DATE_TAG = "pubDate"
 SOURCE_TAG = "source"
 CHANNEL_TAG = "channel"
+
+DATABASE = "./db/database.db"
