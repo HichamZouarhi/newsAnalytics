@@ -1,14 +1,17 @@
+from flask_sqlalchemy import SQLAlchemy
 import constants
 
+db = SQLAlchemy()
 
-class News:
-    def __init__(self):
-        self.title = None
-        self.location = None
-        self.link = None
-        self.publication_date = None
-        self.source = None
-        self.description = None
+
+class News(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String, unique=False, nullable=False)
+    location = db.Column(db.String, unique=False, nullable=False)
+    link = db.Column(db.String, unique=False, nullable=False)
+    publication_date = db.Column(db.String, unique=False, nullable=False)
+    source = db.Column(db.String, unique=False, nullable=False)
+    description = db.Column(db.String, unique=False, nullable=False)
 
     def hydrate(self, item, location):
         self.title = item.find(constants.TITLE_TAG).text
@@ -26,3 +29,17 @@ class News:
         print("publication date : " + self.publication_date)
         print("source : " + self.source)
         print("description : " + self.description)
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def to_dict(self):
+        news_dict = {"id": self.id,
+                     "title": self.title,
+                     "location": self.location,
+                     "link": self.link,
+                     "pubDate": self.publication_date,
+                     "source": self.source,
+                     "description": self.description}
+        return news_dict

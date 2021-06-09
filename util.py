@@ -10,16 +10,20 @@ from bs4 import BeautifulSoup
 from nltk.stem import PorterStemmer
 
 
-def get_news_from_item(item, location):
+def get_news_from_item(item, location, persist):
     news = News.News()
     news.hydrate(item, location)
+    if persist:
+        news.save()
+
     return news
 
 
-def get_news_feed_by_location(location):
+def get_news_feed_by_location(location, persist=False):
     """
     :param location:
-    :return a list of news ( objects ):
+    :param persist: save to db
+    :return: list of news
     """
     url = constants.GEO_URL + location
     cookies = browser_cookie3.chrome(domain_name='.google.com')
@@ -28,7 +32,7 @@ def get_news_feed_by_location(location):
     channel = root.find(constants.CHANNEL_TAG)
     news_list = []
     for item in channel.iter(constants.ITEM_TAG):
-        news_list.append(get_news_from_item(item, location))
+        news_list.append(get_news_from_item(item, location, persist))
 
     return news_list
 

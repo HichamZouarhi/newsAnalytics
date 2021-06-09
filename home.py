@@ -1,9 +1,12 @@
 from flask import Flask
 import util
 import json
+from model.News import db
 
 
 app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db/database.db"
+db.init_app(app)
 
 
 @app.route('/')
@@ -13,8 +16,8 @@ def hello():
 
 @app.route('/newsbygeo/<string:location>')
 def get_news_by_geo(location):
-    news_list = util.get_news_feed_by_location(location)
-    return json.dumps([ob.__dict__ for ob in news_list])
+    news_list = util.get_news_feed_by_location(location, persist=False)
+    return json.dumps([obj.to_dict() for obj in news_list])
 
 
 @app.route('/keywordsbygeo/<string:location>/<int:limit>')
