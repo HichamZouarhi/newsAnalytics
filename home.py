@@ -1,4 +1,6 @@
 from flask import Flask
+
+import constants
 import util
 import json
 from model.News import db
@@ -26,3 +28,9 @@ def get_key_words_by_geo(location, limit):
     key_words = util.get_most_used_words_by_location(news_list, limit)
     return json.dumps(key_words)
 
+
+@app.route('/countriesbygeo/<string:location>/<int:limit>')
+def get_countries_by_geo(location, limit):
+    news_list = util.get_news_feed_by_location(location, persist=False)
+    countries = util.get_subjects_from_news_by_geo(news_list, constants.SPACY_GPE, limit)
+    return json.dumps(countries)

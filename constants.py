@@ -10,3 +10,9 @@ SOURCE_TAG = "source"
 CHANNEL_TAG = "channel"
 
 DATABASE = "./db/database.db"
+
+SPACY_NORP = "NORP"
+SPACY_ORG = "ORG"
+SPACY_MONEY = "MONEY"
+SPACY_DATE = "DATE"
+SPACY_GPE = "GPE"
