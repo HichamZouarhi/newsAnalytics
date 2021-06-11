@@ -34,3 +34,10 @@ def get_countries_by_geo(location, limit):
     news_list = util.get_news_feed_by_location(location, persist=False)
     countries = util.get_subjects_from_news_by_geo(news_list, constants.SPACY_GPE, limit)
     return json.dumps(countries)
+
+
+@app.route('/sourcesbygeo/<string:location>/<int:limit>')
+def get_sources_by_geo(location, limit):
+    news_list = util.get_news_feed_by_location(location, persist=False)
+    sources = util.get_sources_by_geo(news_list, limit)
+    return json.dumps(sources)

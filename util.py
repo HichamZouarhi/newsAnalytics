@@ -70,3 +70,14 @@ def get_subjects_from_news_by_geo(news_list, subject=constants.SPACY_GPE, limit=
         subjects.update(entity.text.lower() for entity in doc.ents if entity.label_ == subject)
 
     return dict((k, v) for k, v in subjects.most_common(limit))
+
+
+def get_sources_by_geo(news_list, limit=10):
+    """
+    :param news_list:
+    :param limit:
+    :return: dict of the most speaking sources bout a location
+    """
+    sources = Counter()
+    sources.update(news.source for news in news_list)
+    return dict((k, v) for k, v in sources.most_common(limit))
