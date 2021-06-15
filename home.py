@@ -16,9 +16,13 @@ def hello():
     return 'Hello, World!'
 
 
-@app.route('/newsbygeo/<string:location>')
-def get_news_by_geo(location):
-    news_list = util.get_news_feed_by_location(location, persist=False)
+@app.route('/newsbygeo/<string:location>/<string:history>')
+def get_news_by_geo(location, history=False):
+    news_list = []
+    if history:
+        news_list = util.get_news_from_db_by_location(location)
+    else:
+        news_list = util.get_news_feed_by_location(location, persist=False)
     return json.dumps([obj.to_dict() for obj in news_list])
 
 

@@ -1,6 +1,6 @@
 import requests
 from xml.etree import ElementTree
-from model import News
+from model.News import News
 import browser_cookie3
 import constants
 import nltk
@@ -14,7 +14,7 @@ import en_core_web_sm
 
 
 def get_news_from_item(item, location, persist):
-    news = News.News()
+    news = News()
     news.hydrate(item, location)
     if persist:
         news.save()
@@ -37,6 +37,17 @@ def get_news_feed_by_location(location, persist=False):
     for item in channel.iter(constants.ITEM_TAG):
         news_list.append(get_news_from_item(item, location, persist))
 
+    return news_list
+
+
+def get_news_from_db_by_location(location):
+    """
+    :param location:
+    :return: list of news
+    """
+    news_list = News.query \
+        .filter_by(location=location) \
+        .all()
     return news_list
 
 
